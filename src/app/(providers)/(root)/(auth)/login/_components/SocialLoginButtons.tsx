@@ -7,11 +7,25 @@ type OAuthProvider = 'google' | 'kakao';
 
 const handleSocialLogin = async (provider: OAuthProvider) => {
   const supabase = createClient();
+  //   const { error } = await supabase.auth.signInWithOAuth({
+  //     provider: provider,
+  //     options: {
+  //       // redirectTo: `${window.location.origin}/auth/callback`
+  //       redirectTo: `${process.env.NEXT_PUBLIC_REDIRECT_URL}/auth/callback`
+  //     }
+  //   });
+
+  const redirectUrl = process.env.NEXT_PUBLIC_REDIRECT_URL;
+
+  if (!redirectUrl) {
+    console.error('NEXT_PUBLIC_REDIRECT_URL is not defined');
+    return;
+  }
+
   const { error } = await supabase.auth.signInWithOAuth({
     provider: provider,
     options: {
-      // redirectTo: `${window.location.origin}/auth/callback`
-      redirectTo: `${process.env.NEXT_PUBLIC_REDIRECT_URL}/auth/callback`
+      redirectTo: `${redirectUrl}/auth/callback`
     }
   });
 
